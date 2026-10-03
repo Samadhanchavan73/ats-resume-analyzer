@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+      layout:decorate="~{layout}">
+<head>
+    <title>New Analysis</title>
+</head>
+<body>
+
+    <div layout:fragment="content">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="text-center">
+                    <img th:src="@{/images/4195798.jpg}" 
+                         alt="Resume Analysis Illustration" 
+                         class="header-image rounded shadow-sm"
+                         style="max-width: 500px; height: 250px; object-fit: cover;"
+                         onerror="this.src='https://placehold.co/400x200/cccccc/ffffff?text=Image+Not+Found'">
+                </div>
+                <div class="content-card p-4 p-md-5">
+
+                    <div class="header-section text-center mb-4">
+                        <h1 class="h3 fw-bold text-dark mb-2">ATS Resume Analyser</h1>
+                        <p class="text-muted">Get a full AI-powered review of your resume.</p>
+                    </div>
+
+                    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+                    <div id="analysis-form">
+                        <form method="POST" th:action="@{/analyze}" enctype="multipart/form-data" class="mb-5">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+                            <div class="mb-3">
+                                <label for="resumeFile" class="form-label fw-medium">1. Upload Your Resume</label>
+                                <input type="file" class="form-control" id="resumeFile" name="resumeFile" accept=".pdf,.doc,.docx" required />
+                            </div>
+                            <div class="mb-3">
+                                <label for="jobDescription" class="form-label fw-medium">2. Paste Job Description</label>
+                                <textarea class="form-control" id="jobDescription" name="jobDescription" rows="7" placeholder="Paste the full job description here..." required></textarea>
+                            </div>
+                            <div class="mb-4">
+                                <label for="companyType" class="form-label fw-medium">3. Select Company Type</label>
+                                <select class="form-select" id="companyType" name="companyType" required>
+                                    <option value="Product" selected>Product-Based (e.g., Google, Adobe)</option>
+                                    <option value="Service">Service-Based (e.g., TCS, Infosys)</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-lg w-100">🚀 Analyze My Resume</button>
+                        </form>
+                    </div>
+                    
+                    <div id="loading-indicator" style="display: none;" class="text-center p-4">
+                        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <h4 class="text-dark mt-3">Analyzing your resume...</h4>
+                        <p class="text-muted">This can take up to 30 seconds as the AI reads your file.</p>
+                        
+                        <ul class="list-unstyled text-start mt-4" style="max-width: 300px; margin: auto;">
+                            <li id="loading-step-1" class="mb-2"><i class="bi bi-check-lg text-success"></i> Parsing resume text...</li>
+                            <li id="loading-step-2" class="mb-2" style="display: none; opacity: 0; transition: opacity 0.5s ease;"><i class="bi bi-check-lg text-success"></i> Checking ATS compliance...</li>
+                            <li id="loading-step-3" class="mb-2" style="display: none; opacity: 0; transition: opacity 0.5s ease;"><i class="bi bi-check-lg text-success"></i> Sending to AI for expert review...</li>
+                        </ul>
+                    </div>
+
+                    <div th:if="${result != null}" class="results-section">
+                        <h2 class="h4 mb-4 text-dark">Analysis for <span class="fw-bold text-primary" th:text="${fileName}"></span></h2>
+
+                        <div class="mb-4" th:if="${result.complianceWarnings != null and !result.complianceWarnings.isEmpty()}">
+                            <h3 class="h5 fw-semibold text-dark">⚠️ ATS Compliance Checks</h3>
+                            <div class="card card-body bg-warning-subtle border-0 rounded-3">
+                                <ul class="mb-0">
+                                    <li th:each="warning : ${result.complianceWarnings}" th:text="${warning}"></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="scorecard-section mb-4">
+                            <h3 class="h5 fw-semibold text-dark">📊 Resume Scorecard</h3>
+                            <div class="card card-body bg-light-subtle border-0 rounded-3">
+                                <div class="row g-4" id="score-visualization">
+                                    <p class="text-muted">Loading scores...</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="ai-report-section">
+                            <h3 class="h5 fw-semibold text-dark">💡 AI-Powered Report</h3>
+                            <div class="card card-body bg-light-subtle border-0 rounded-3">
+                                <div id="ai-report-text" th:utext="${@markdownRenderer.render(result.aiSuggestions)}"></div>
+                            </div>
+                        </div>
+                    </div> </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block layout:fragment="scripts">
+    
+        <script>
+            // Find the form and the loading indicator
+            const analysisForm = document.getElementById('analysis-form');
+            const loadingIndicator = document.getElementById('loading-indicator');
+            
+            if (analysisForm) { // Make sure the form exists
+                const submitButton = analysisForm.querySelector('button[type="submit"]');
+                const formElement = analysisForm.querySelector('form');
+                
+                formElement.addEventListener('submit', function() {
+                    
+                    submitButton.disabled = true;
+                    submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+                    analysisForm.style.display = 'none';
+                    loadingIndicator.style.display = 'block';
+
+                    setTimeout(() => {
+                        const step2 = document.getElementById('loading-step-2');
+                        if (step2) {
+                            step2.style.display = 'block';
+                            setTimeout(() => step2.style.opacity = 1, 50);
+                        }
+                    }, 2000);
+                    
+                    setTimeout(() => {
+                        const step3 = document.getElementById('loading-step-3');
+                        if (step3) {
+                            step3.style.display = 'block';
+                            setTimeout(() => step3.style.opacity = 1, 50);
+                        }
+                    }, 4000); 
+                });
+            }
+        </script>
+
+        <script th:if="${result != null}">
+            document.addEventListener('DOMContentLoaded', function() {
+                
+                // 1. Get the raw text from the AI report
+                const reportElement = document.getElementById('ai-report-text');
+                if (!reportElement) return;
+                
+                // Use innerHTML to find the text.
+                const rawHTML = reportElement.innerHTML;
+                const visualizationContainer = document.getElementById('score-visualization');
+
+                // 2. A Regex to find our scores, e.g., "Brevity:** (85/100)"
+                const scoreRegex = /<strong>(Brevity|Impact|Technical Skills|Style):<\/strong>\s*\((\d{1,3})\/100\)/g;
+
+                let scores = [];
+                let match;
+                
+                // 3. Loop through all matches found in the text
+                while ((match = scoreRegex.exec(rawHTML)) !== null) {
+                    scores.push({
+                        name: match[1],
+                        value: parseInt(match[2])
+                    });
+                }
+
+                // 4. Build and inject the new HTML (the progress bars)
+                if (scores.length > 0) {
+                    let html = '';
+                    scores.forEach(score => {
+                        let barColor = 'bg-success'; // green
+                        if (score.value < 75) barColor = 'bg-warning text-dark'; // yellow
+                        if (score.value < 50) barColor = 'bg-danger'; // red
+
+                        html += `
+                            <div class="col-md-6">
+                                <h6 class="text-dark fw-medium">${score.name}</h6>
+                                <div class="progress" style="height: 25px;">
+                                    <div class="progress-bar ${barColor}" 
+                                         role="progressbar" 
+                                         style="width: ${score.value}%;" 
+                                         aria-valuenow="${score.value}" 
+                                         aria-valuemin="0" 
+                                         aria-valuemax="100">
+                                        ${score.value}%
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    visualizationContainer.innerHTML = html;
+                } else {
+                    visualizationContainer.innerHTML = '<p class="text-muted">Could not parse scores from the AI report.</p>';
+                }
+                
+                // 5. Clean up the text report by removing the scores we just visualized
+                reportElement.innerHTML = reportElement.innerHTML.replace(/<h2>Resume Scorecard<\/h2>/, '');
+                reportElement.innerHTML = reportElement.innerHTML.replace(/<ul>\s*(<li><strong>(Brevity|Impact|Technical Skills|Style):<\/strong>.*?<\/li>\s*){4}<\/ul>/, '');
+
+            });
+        </script>
+    </th:block>
+</body>
+</html>
