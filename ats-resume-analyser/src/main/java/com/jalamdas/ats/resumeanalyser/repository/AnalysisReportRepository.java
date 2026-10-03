@@ -1,7 +1,7 @@
-package com.samadhan.ats.resumeanalyser.repository;
+package com.jalamdas.ats.resumeanalyser.repository;
 
-import com.samadhan.ats.resumeanalyser.model.AnalysisReport;
-import com.samadhan.ats.resumeanalyser.model.User;
+import com.jalamdas.ats.resumeanalyser.model.AnalysisReport;
+import com.jalamdas.ats.resumeanalyser.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 

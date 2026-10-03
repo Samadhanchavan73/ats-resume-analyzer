@@ -1,6 +1,6 @@
-package com.samadhan.ats.resumeanalyser.controller;
+package com.jalamdas.ats.resumeanalyser.controller;
 
-import com.samadhan.ats.resumeanalyser.service.UserService;
+import com.jalamdas.ats.resumeanalyser.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

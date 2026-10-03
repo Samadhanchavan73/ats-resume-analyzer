@@ -1,4 +1,4 @@
-package com.samadhan.ats.resumeanalyser.model;
+package com.jalamdas.ats.resumeanalyser.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

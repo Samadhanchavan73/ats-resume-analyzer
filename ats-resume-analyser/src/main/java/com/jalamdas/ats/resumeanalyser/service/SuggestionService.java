@@ -1,4 +1,4 @@
-package com.samadhan.ats.resumeanalyser.service;
+package com.jalamdas.ats.resumeanalyser.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;

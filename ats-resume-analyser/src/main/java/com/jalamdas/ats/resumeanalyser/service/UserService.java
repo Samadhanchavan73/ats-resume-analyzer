@@ -1,7 +1,7 @@
-package com.samadhan.ats.resumeanalyser.service;
+package com.jalamdas.ats.resumeanalyser.service;
 
-import com.samadhan.ats.resumeanalyser.model.User;
-import com.samadhan.ats.resumeanalyser.repository.UserRepository;
+import com.jalamdas.ats.resumeanalyser.model.User;
+import com.jalamdas.ats.resumeanalyser.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

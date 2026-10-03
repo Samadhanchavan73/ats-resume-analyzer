@@ -1,9 +1,9 @@
-package com.samadhan.ats.resumeanalyser.service;
+package com.jalamdas.ats.resumeanalyser.service;
 
-import com.samadhan.ats.resumeanalyser.model.AnalysisReport;
-import com.samadhan.ats.resumeanalyser.model.User;
-import com.samadhan.ats.resumeanalyser.repository.AnalysisReportRepository;
-import com.samadhan.ats.resumeanalyser.repository.UserRepository;
+import com.jalamdas.ats.resumeanalyser.model.AnalysisReport;
+import com.jalamdas.ats.resumeanalyser.model.User;
+import com.jalamdas.ats.resumeanalyser.repository.AnalysisReportRepository;
+import com.jalamdas.ats.resumeanalyser.repository.UserRepository;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.springframework.beans.factory.annotation.Autowired;
