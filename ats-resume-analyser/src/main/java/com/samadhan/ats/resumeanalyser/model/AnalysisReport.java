@@ -1,4 +1,4 @@
-package com.anant.ats.resumeanalyser.model;
+package com.samadhan.ats.resumeanalyser.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

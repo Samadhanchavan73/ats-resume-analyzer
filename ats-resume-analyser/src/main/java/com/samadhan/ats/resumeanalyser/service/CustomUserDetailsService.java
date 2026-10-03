@@ -1,7 +1,7 @@
-package com.anant.ats.resumeanalyser.service;
+package com.samadhan.ats.resumeanalyser.service;
 
-import com.anant.ats.resumeanalyser.model.User;
-import com.anant.ats.resumeanalyser.repository.UserRepository;
+import com.samadhan.ats.resumeanalyser.model.User;
+import com.samadhan.ats.resumeanalyser.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

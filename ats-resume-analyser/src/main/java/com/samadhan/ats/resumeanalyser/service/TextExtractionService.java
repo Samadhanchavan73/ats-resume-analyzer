@@ -1,4 +1,4 @@
-package com.anant.ats.resumeanalyser.service;
+package com.samadhan.ats.resumeanalyser.service;
 
 import org.apache.tika.Tika;
 import org.apache.tika.exception.TikaException;

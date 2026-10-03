@@ -1,4 +1,4 @@
-package com.anant.ats.resumeanalyser.config;
+package com.samadhan.ats.resumeanalyser.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

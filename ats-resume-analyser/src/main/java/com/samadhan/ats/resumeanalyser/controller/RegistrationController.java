@@ -1,6 +1,6 @@
-package com.anant.ats.resumeanalyser.controller;
+package com.samadhan.ats.resumeanalyser.controller;
 
-import com.anant.ats.resumeanalyser.service.UserService;
+import com.samadhan.ats.resumeanalyser.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

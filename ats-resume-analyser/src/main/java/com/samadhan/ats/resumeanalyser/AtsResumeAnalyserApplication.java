@@ -1,4 +1,4 @@
-package com.anant.ats.resumeanalyser;
+package com.samadhan.ats.resumeanalyser;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
