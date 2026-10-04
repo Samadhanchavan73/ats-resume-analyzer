@@ -121,7 +121,7 @@ Install the following:
 ### 1. Clone the Repository
 
 ``` bash
-git clone https://github.com/Samadhanchavan73/ATS-Resume-Analyzer.git
+git clone https://github.com/Jalamdas-Chavan/ATS-Resume-Analyzer.git
 cd ATS-Resume-Analyzer
 ```
 
